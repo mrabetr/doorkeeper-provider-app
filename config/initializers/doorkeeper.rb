@@ -263,7 +263,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.2
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
-  # grant_flows %w[authorization_code client_credentials]
+  grant_flows %w[authorization_code client_credentials]
 
   # Hook into the strategies' request & response life-cycle in case your
   # application needs advanced customization or logging:
@@ -297,6 +297,14 @@ Doorkeeper.configure do
   # skip_authorization do |resource_owner, client|
   #   client.superapp? or resource_owner.admin?
   # end
+  # skip_authorization do
+  #   true
+  # end
+  skip_authorization do |resource_owner, client|
+    resource_owner.oauth_applications.include? client.application
+    # an account has many projects and each project has many client apps
+    # customer user can be associated to a project, which has many client apps
+  end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   #

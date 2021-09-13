@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Api::V1
-  class ProjectsController < ApiController
+  class ProjectsController < BaseController
     before_action -> { doorkeeper_authorize! :read }, only: %i[index show]
     before_action -> { doorkeeper_authorize! :write }, only: %i[create update destroy]
 

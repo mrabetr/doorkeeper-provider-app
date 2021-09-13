@@ -1,3 +1,4 @@
+<%= render 'layouts/header' %>
 <header class="page-header">
   <h1><%= t('doorkeeper.authorized_applications.index.title') %></h1>
 </header>
@@ -14,7 +15,7 @@
     <tbody>
     <% @applications.each do |application| %>
       <tr>
-        <td><%= application.name %></td>
+        <td><%= link_to application.name, oauth_application_path(application) %></td>
         <td><%= application.created_at.strftime(t('doorkeeper.authorized_applications.index.date_format')) %></td>
         <td><%= render 'delete_form', application: application %></td>
       </tr>
