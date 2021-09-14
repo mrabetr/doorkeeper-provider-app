@@ -112,10 +112,10 @@ ActiveRecord::Schema.define(version: 2021_09_14_084452) do
 
   add_foreign_key "customers", "projects"
   add_foreign_key "notes", "customers"
+  add_foreign_key "oauth_access_grants", "customers", column: "resource_owner_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
-  add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
+  add_foreign_key "oauth_access_tokens", "customers", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
-  add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "oauth_applications", "projects"
   add_foreign_key "projects", "users"
 end
