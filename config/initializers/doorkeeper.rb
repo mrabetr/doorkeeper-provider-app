@@ -1,10 +1,10 @@
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
-
+  # application_class "Doorkeeper::Application"
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    current_user || warden.authenticate!(scope: :user)
+    current_user || warden.authenticate!(scope: :customer)
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
@@ -300,11 +300,11 @@ Doorkeeper.configure do
   # skip_authorization do
   #   true
   # end
-  skip_authorization do |resource_owner, client|
-    resource_owner.oauth_applications.include? client.application
-    # an account has many projects and each project has many client apps
-    # customer user can be associated to a project, which has many client apps
-  end
+  # skip_authorization do |resource_owner, client|
+  #   resource_owner.oauth_applications.include? client.application
+  #   # an account has many projects and each project has many client apps
+  #   # customer user can be associated to a project, which has many client apps
+  # end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   #

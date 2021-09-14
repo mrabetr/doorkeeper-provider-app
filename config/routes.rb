@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  devise_for :customers
   use_doorkeeper do
     controllers applications: 'oauth_applications'
   end

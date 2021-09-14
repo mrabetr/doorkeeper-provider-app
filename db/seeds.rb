@@ -1,15 +1,29 @@
 # frozen_string_literal: true
 
 owner = User.create!(
-  email: 'user@example.com',
-  password: 'doorkeeper',
-  password_confirmation: 'doorkeeper'
+  email: 'mrabetr@hotmail.com',
+  password: '123456',
+  password_confirmation: '123456'
+)
+
+project = Project.create!(
+  name: 'Appibase',
+  url: 'appibase.com',
+  user: owner
 )
 
 app = Doorkeeper::Application.create!(
-  name: 'Doorkeeper Sinatra Client',
-  redirect_uri: 'https://doorkeeper-sinatra.herokuapp.com/callback',
-  owner: owner
+  name: 'Appibase App',
+  redirect_uri: 'https://oauthdebugger.com/debug',
+  owner: owner,
+  project_id: project.id
+)
+
+customer = Customer.create!(
+  email: 'customer@hotmail.com',
+  password: '123456',
+  password_confirmation: '123456',
+  project: project
 )
 
 puts 'Application: '
