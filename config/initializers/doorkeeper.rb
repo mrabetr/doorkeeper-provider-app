@@ -2,9 +2,19 @@ Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
 
+  # Extend (or even override) default Doorkeeper models such as Application, AccessToken and AccessGrant
+  # https://doorkeeper.gitbook.io/guides/configuration/models
+  application_class "Doorkeeper::Application"
+
+  # Enable polymorphic Resource Owner feature for Doorkeeper Access Tokens & Grants
+  # https://doorkeeper.gitbook.io/guides/ruby-on-rails/polymorphic-resource-owner
+  use_polymorphic_resource_owner
+
   # This block will be called to check whether the resource owner is authenticated or not.
+  # https://doorkeeper.gitbook.io/guides/ruby-on-rails/configuration
   resource_owner_authenticator do
-    current_user || warden.authenticate!(scope: :user)
+    current_user || warden.authenticate!(scope: :customer)
+    # User.last
   end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
@@ -22,7 +32,7 @@ Doorkeeper.configure do
   #     redirect_to sign_in_url
   #   end
   # end
-  admin_authenticator do
+  admin_authenticator do |_routes|
     current_user || warden.authenticate!(scope: :user)
   end
 
@@ -144,6 +154,7 @@ Doorkeeper.configure do
   use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
+  # https://github.com/doorkeeper-gem/doorkeeper/wiki/Associate-users-to-OAuth-applications-(ownership)
   # Optional parameter confirmation: true (default false) if you want to enforce ownership of
   # a registered application
   # Note: you must also run the rails g doorkeeper:application_owner generator to provide the necessary support
@@ -300,11 +311,15 @@ Doorkeeper.configure do
   # skip_authorization do
   #   true
   # end
-  skip_authorization do |resource_owner, client|
-    resource_owner.oauth_applications.include? client.application
-    # an account has many projects and each project has many client apps
-    # customer user can be associated to a project, which has many client apps
-  end
+  # skip_authorization do |resource_owner, client|
+  #   # resource_owner.oauth_applications.include? client.application
+  #   # resource_owner.project.oauth_applications.include? client.application
+
+  #   # Only applicable to Customer user model
+  #   resource_owner.project_id == client.application.project_id
+  #   # an account has many projects and each project has many client apps
+  #   # customer user can be associated to a project, which has many client apps
+  # end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   #
