@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class OauthApplicationsController < ApplicationController
-  # before_action :authenticate_user!
+  # This is a custom controller that can be used instead of Doorkeeper's default
+  before_action :authenticate_user!
   before_action :set_application, only: %i[show edit update destroy]
 
   def index
