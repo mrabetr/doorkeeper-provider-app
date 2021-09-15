@@ -21,7 +21,8 @@ class User < ApplicationRecord
   #          dependent: :delete_all # or :destroy if you need callbacks
 
   has_many :oauth_applications,
-           class_name: "Doorkeeper::Application",
+           # class_name: "Doorkeeper::Application",
+           class_name: "OauthApplication",
            as: :owner
 
   has_many :projects, dependent: :delete_all

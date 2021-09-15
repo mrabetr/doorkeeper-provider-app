@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_084452) do
+ActiveRecord::Schema.define(version: 2021_09_14_182243) do
 
   create_table "customers", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -45,7 +45,9 @@ ActiveRecord::Schema.define(version: 2021_09_14_084452) do
     t.string "scopes"
     t.string "code_challenge"
     t.string "code_challenge_method"
+    t.string "resource_owner_type", null: false
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
+    t.index ["resource_owner_id", "resource_owner_type"], name: "polymorphic_owner_oauth_access_grants"
     t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
@@ -60,8 +62,10 @@ ActiveRecord::Schema.define(version: 2021_09_14_084452) do
     t.datetime "created_at", null: false
     t.string "scopes"
     t.string "previous_refresh_token", default: "", null: false
+    t.string "resource_owner_type"
     t.index ["application_id"], name: "index_oauth_access_tokens_on_application_id"
     t.index ["refresh_token"], name: "index_oauth_access_tokens_on_refresh_token", unique: true
+    t.index ["resource_owner_id", "resource_owner_type"], name: "polymorphic_owner_oauth_access_tokens"
     t.index ["resource_owner_id"], name: "index_oauth_access_tokens_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_tokens_on_token", unique: true
   end
@@ -112,9 +116,7 @@ ActiveRecord::Schema.define(version: 2021_09_14_084452) do
 
   add_foreign_key "customers", "projects"
   add_foreign_key "notes", "customers"
-  add_foreign_key "oauth_access_grants", "customers", column: "resource_owner_id"
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
-  add_foreign_key "oauth_access_tokens", "customers", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_applications", "projects"
   add_foreign_key "projects", "users"

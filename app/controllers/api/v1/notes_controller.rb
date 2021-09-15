@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api::V1
   class NotesController < BaseController
     before_action -> { doorkeeper_authorize! :read }, only: %i[index show]

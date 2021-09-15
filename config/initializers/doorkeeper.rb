@@ -1,8 +1,17 @@
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
+
+  # Extend (or even override) default Doorkeeper models such as Application, AccessToken and AccessGrant
+  # https://doorkeeper.gitbook.io/guides/configuration/models
   application_class "Doorkeeper::Application"
+
+  # Enable polymorphic Resource Owner feature for Doorkeeper Access Tokens & Grants
+  # https://doorkeeper.gitbook.io/guides/ruby-on-rails/polymorphic-resource-owner
+  use_polymorphic_resource_owner
+
   # This block will be called to check whether the resource owner is authenticated or not.
+  # https://doorkeeper.gitbook.io/guides/ruby-on-rails/configuration
   resource_owner_authenticator do
     current_user || warden.authenticate!(scope: :customer)
   end
@@ -300,11 +309,13 @@ Doorkeeper.configure do
   # skip_authorization do
   #   true
   # end
-  # skip_authorization do |resource_owner, client|
-  #   resource_owner.oauth_applications.include? client.application
-  #   # an account has many projects and each project has many client apps
-  #   # customer user can be associated to a project, which has many client apps
-  # end
+  skip_authorization do |resource_owner, client|
+    # resource_owner.oauth_applications.include? client.application
+    # resource_owner.project.oauth_applications.include? client.application
+    resource_owner.project_id == client.application.project_id
+    # an account has many projects and each project has many client apps
+    # customer user can be associated to a project, which has many client apps
+  end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   #

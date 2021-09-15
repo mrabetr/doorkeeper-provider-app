@@ -70,7 +70,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration[5.1]
     )
 
     # Uncomment below to ensure a valid reference to the resource owner's table
-    add_foreign_key :oauth_access_grants, :customers, column: :resource_owner_id
-    add_foreign_key :oauth_access_tokens, :customers, column: :resource_owner_id
+    # add_foreign_key :oauth_access_grants, :customers, column: :resource_owner_id
+    # add_foreign_key :oauth_access_tokens, :customers, column: :resource_owner_id
   end
 end
