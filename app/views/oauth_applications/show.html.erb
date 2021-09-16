@@ -20,12 +20,21 @@
       <tbody>
         <% @application.redirect_uri.split.each do |uri| %>
           <tr>
+            <%# code_challenge = 'S7jFjWRvPGdwwG1ld5H4G22FEO6S2BiwkIvDYIXp1p4' %>
+            <% code_challenge = @code_challenge %>
             <td class="align-middle"><code><%= uri %></code></td>
             <td class="align-middle" style="width: 70px"><%= link_to t('doorkeeper.applications.buttons.authorize'), oauth_authorization_path(client_id: @application.uid, redirect_uri: uri, response_type: 'code', scope: @application.scopes), class: 'btn btn-sm btn-success', target: '_blank' %></td>
+            <td class="align-middle" style="width: 70px"><%= link_to t('doorkeeper.applications.buttons.authorize'), oauth_authorization_path(client_id: @application.uid, redirect_uri: uri, response_type: 'code', scope: @application.scopes, code_challenge: 'testchallenge', code_challenge_method: 'plain'), class: 'btn btn-sm btn-success', target: '_blank' %></td>
+            <td class="align-middle" style="width: 70px"><%= link_to t('doorkeeper.applications.buttons.authorize'), oauth_authorization_path(client_id: @application.uid, redirect_uri: uri, response_type: 'code', scope: @application.scopes, code_challenge: code_challenge, code_challenge_method: 'S256'), class: 'btn btn-sm btn-success', target: '_blank' %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
+    <h5>Code Verifier</h5>
+    <p><code><%= @code_verifier %></code></p>
+
+    <h5>Code Challenge</h5>
+    <p><code><%= @code_challenge %></code></p>
   </div>
 
   <div class="col-3">
