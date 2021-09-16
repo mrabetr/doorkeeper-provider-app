@@ -3,7 +3,7 @@
 Rails.application.routes.draw do
   use_doorkeeper do
     # the custom applications controller isn't needed but can be used to customise things
-    # controllers applications: 'oauth_applications'
+    controllers applications: 'oauth_applications'
   end
 
   devise_for :users, controllers: {

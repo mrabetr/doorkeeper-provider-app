@@ -10,6 +10,9 @@ class OauthApplicationsController < ApplicationController
   end
 
   def show
+    pkce_challenge = PkceChallenge.challenge(char_length: 128)
+    @code_verifier = pkce_challenge.code_verifier
+    @code_challenge = pkce_challenge.code_challenge
   end
 
   def new
@@ -53,6 +56,6 @@ class OauthApplicationsController < ApplicationController
     end
 
     def application_params
-      params.require(:doorkeeper_application).permit(:name, :redirect_uri, :scopes, :confidential)
+      params.require(:oauth_application).permit(:name, :redirect_uri, :scopes, :confidential)
     end
 end

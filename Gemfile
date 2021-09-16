@@ -21,6 +21,8 @@ gem "rollbar"
 gem "puma"
 gem "rack-timeout"
 
+gem 'pkce_challenge'
+
 group :development do
   gem "listen"
   gem "rubocop-performance"
