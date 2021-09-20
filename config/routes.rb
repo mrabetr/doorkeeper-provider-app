@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  use_doorkeeper_openid_connect
   use_doorkeeper do
     # the custom applications controller isn't needed but can be used to customise things
     controllers applications: 'oauth_applications'

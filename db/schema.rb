@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_14_182243) do
+ActiveRecord::Schema.define(version: 2021_09_16_132415) do
 
   create_table "customers", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -87,6 +87,12 @@ ActiveRecord::Schema.define(version: 2021_09_14_182243) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "oauth_openid_requests", force: :cascade do |t|
+    t.integer "access_grant_id", null: false
+    t.string "nonce", null: false
+    t.index ["access_grant_id"], name: "index_oauth_openid_requests_on_access_grant_id"
+  end
+
   create_table "projects", force: :cascade do |t|
     t.integer "user_id"
     t.string "name"
@@ -119,5 +125,6 @@ ActiveRecord::Schema.define(version: 2021_09_14_182243) do
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_applications", "projects"
+  add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "projects", "users"
 end
