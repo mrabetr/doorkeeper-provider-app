@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :projects
+      # nest use_doorkeeper on: :member to limit client_credentials to a project
       resources :notes
       get '/me' => 'credentials#me'
       get '/application' => 'credentials#application'

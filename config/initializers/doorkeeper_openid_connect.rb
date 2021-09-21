@@ -7,8 +7,9 @@ Doorkeeper::OpenidConnect.configure do
   end
 
   # https://kentakodashima.medium.com/generate-pem-keys-with-openssl-on-macos-ecac55791373
+  signing_key File.read("jwtRS256.key")
   # signing_key File.read("private.pem")
-  signing_key ENV['openid_signing_key']
+  # signing_key ENV['openid_signing_key']
   # <<~KEY
   #   -----BEGIN RSA PRIVATE KEY-----
   #   ....
@@ -19,13 +20,14 @@ Doorkeeper::OpenidConnect.configure do
 
   resource_owner_from_access_token do |access_token|
     # Example implementation:
-    User.find_by(id: access_token.resource_owner_id)
-    # access_token.resource_owner
+    # User.find_by(id: access_token.resource_owner_id)
+    # Customer.find_by(id: access_token.resource_owner_id)
+    access_token.resource_owner
   end
 
   auth_time_from_resource_owner do |resource_owner|
     # Example implementation:
-    resource_owner.current_sign_in_at
+    # resource_owner.current_sign_in_at
   end
 
   reauthenticate_resource_owner do |resource_owner, return_to|
@@ -44,7 +46,9 @@ Doorkeeper::OpenidConnect.configure do
   select_account_for_resource_owner do |resource_owner, return_to|
     # Example implementation:
     # store_location_for resource_owner, return_to
+    # sign_out resource_owner
     # redirect_to account_select_url
+    # redirect_to new_user_session_url
   end
 
   subject do |resource_owner, application|
@@ -53,6 +57,8 @@ Doorkeeper::OpenidConnect.configure do
 
     # or if you need pairwise subject identifier, implement like below:
     # Digest::SHA256.hexdigest("#{resource_owner.id}#{URI.parse(application.redirect_uri).host}#{'your_secret_salt'}")
+    # hash the resource_owner's ID with the Rails secret_key_base to avoid revealing it
+    # Digest::SHA256.hexdigest "#{resource_owner.id}-#{Rails.application.secrets.secret_key_base}"
   end
 
   # Protocol to use when generating URIs for the discovery endpoint,
@@ -64,6 +70,15 @@ Doorkeeper::OpenidConnect.configure do
   # Expiration time on or after which the ID Token MUST NOT be accepted for processing. (default 120 seconds).
   # expiration 600
 
+  # https://github.com/doorkeeper-gem/doorkeeper-openid_connect#claims
+  # https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+  claims do
+    # You can optionally pass a response: keyword with one or both of the symbols
+    # :id_token or :user_info to specify where the claim should be returned.
+    claim :email, response: [:id_token, :user_info] do |resource_owner|
+      resource_owner.email
+    end
+
   # Example claims:
   # claims do
   #   normal_claim :_foo_ do |resource_owner|
@@ -74,10 +89,10 @@ Doorkeeper::OpenidConnect.configure do
   #     resource_owner.bar
   #   end
   # end
-  claims do
-    normal_claim :email do |resource_owner|
-      resource_owner.email
-    end
+
+    # claim :email do |resource_owner, scopes|
+    #   scopes.exists?(:email) ? resource_owner.email : ''
+    # end
 
     # claim :full_name do |resource_owner|
     #   "#{resource_owner.first_name} #{resource_owner.last_name}"

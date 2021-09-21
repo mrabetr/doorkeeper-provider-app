@@ -7,3 +7,5 @@ spec/examples.txt
 .idea/
 .env*
 private.pem
+jwtRS256.key
+jwtRS256.key.pub

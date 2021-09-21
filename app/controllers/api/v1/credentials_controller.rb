@@ -2,7 +2,8 @@
 
 module Api::V1
   class CredentialsController < BaseController
-    before_action :doorkeeper_authorize!
+    # before_action :doorkeeper_authorize!
+    before_action -> { doorkeeper_authorize! :id_token }
 
     def me
       render json: current_resource_owner

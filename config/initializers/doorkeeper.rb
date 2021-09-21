@@ -172,7 +172,7 @@ Doorkeeper.configure do
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   #
   default_scopes :read
-  optional_scopes :write, :openid
+  optional_scopes :write, :openid, :email, :id_token
 
   # Define scopes_by_grant_type to restrict only certain scopes for grant_type
   # By default, all the scopes will be available for all the grant types.
