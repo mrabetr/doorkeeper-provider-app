@@ -5,7 +5,7 @@ source "http://rubygems.org"
 ruby "2.6.6"
 
 gem "rails", "~> 6.1"
-gem "doorkeeper", "~> 5.5.2"
+gem "doorkeeper", "~> 5.5.3"
 gem "devise", "~> 4.8"
 gem 'pkce_challenge'
 gem 'doorkeeper-openid_connect'
